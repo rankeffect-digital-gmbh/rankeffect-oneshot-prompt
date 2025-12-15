@@ -4,13 +4,15 @@ import { useEffect, useCallback, useState } from 'react';
 import Image from 'next/image';
 import styles from './MediaModal.module.css';
 import { calculateQuota, upvoteMedia, downvoteMedia, vetoMedia } from '@/lib/mediaService';
+import { isVideoFile } from '@/lib/storageService';
 
-export default function MediaModal({ filename, votes, onClose, onVoteUpdate }) {
+export default function MediaModal({ filename, url, votes, onClose, onVoteUpdate }) {
   const [isVoting, setIsVoting] = useState(false);
   const [currentVotes, setCurrentVotes] = useState(votes);
   
-  const isVideo = filename.toLowerCase().endsWith('.mp4');
-  const mediaPath = `/media/${filename}`;
+  const isVideo = isVideoFile(filename);
+  // Use provided URL (from Firebase Storage) or fallback to local path
+  const mediaPath = url || `/media/${filename}`;
   
   const quota = currentVotes ? calculateQuota(currentVotes.upvotes, currentVotes.downvotes) : null;
   const totalVotes = currentVotes ? currentVotes.upvotes + currentVotes.downvotes : 0;
@@ -109,15 +111,25 @@ export default function MediaModal({ filename, votes, onClose, onVoteUpdate }) {
               playsInline
             />
           ) : (
-            <Image
-              src={mediaPath}
-              alt={filename}
-              fill
-              sizes="100vw"
-              className={styles.media}
-              style={{ objectFit: 'contain' }}
-              priority
-            />
+            // Use img tag for external URLs (Firebase Storage)
+            url ? (
+              <img
+                src={mediaPath}
+                alt={filename}
+                className={styles.media}
+                style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
+              />
+            ) : (
+              <Image
+                src={mediaPath}
+                alt={filename}
+                fill
+                sizes="100vw"
+                className={styles.media}
+                style={{ objectFit: 'contain' }}
+                priority
+              />
+            )
           )}
         </div>
 

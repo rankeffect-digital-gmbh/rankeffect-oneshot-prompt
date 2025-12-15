@@ -33,3 +33,14 @@
     transform: rotate(360deg);
   }
 }
+
+.errorBanner {
+  margin: 0 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  color: #ffc107;
+  font-size: 0.875rem;
+  text-align: center;
+}

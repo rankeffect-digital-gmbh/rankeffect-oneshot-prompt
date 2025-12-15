@@ -3,10 +3,13 @@
 import Image from 'next/image';
 import styles from './MediaCard.module.css';
 import { calculateQuota } from '@/lib/mediaService';
+import { isVideoFile } from '@/lib/storageService';
 
-export default function MediaCard({ filename, votes, onClick }) {
-  const isVideo = filename.toLowerCase().endsWith('.mp4');
-  const mediaPath = `/media/${filename}`;
+export default function MediaCard({ filename, url, votes, onClick }) {
+  // Check if it's a video based on filename extension
+  const isVideo = isVideoFile(filename);
+  // Use provided URL (from Firebase Storage) or fallback to local path
+  const mediaPath = url || `/media/${filename}`;
   
   const quota = votes ? calculateQuota(votes.upvotes, votes.downvotes) : null;
   const totalVotes = votes ? votes.upvotes + votes.downvotes : 0;
@@ -39,14 +42,24 @@ export default function MediaCard({ filename, votes, onClick }) {
             </div>
           </>
         ) : (
-          <Image
-            src={mediaPath}
-            alt={filename}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className={styles.media}
-            style={{ objectFit: 'cover' }}
-          />
+          // Use img tag for external URLs (Firebase Storage)
+          url ? (
+            <img
+              src={mediaPath}
+              alt={filename}
+              className={styles.media}
+              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            />
+          ) : (
+            <Image
+              src={mediaPath}
+              alt={filename}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className={styles.media}
+              style={{ objectFit: 'cover' }}
+            />
+          )
         )}
       </div>
       

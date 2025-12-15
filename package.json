@@ -9,10 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@azure/msal-node": "^3.8.4",
     "firebase": "^12.6.0",
+    "heic-convert": "^2.1.0",
     "next": "16.0.10",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "babel-plugin-react-compiler": "1.0.0",
