@@ -34,6 +34,32 @@
   margin: 0;
 }
 
+.sharepointLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 247, 176, 0.3);
+  background: rgba(74, 247, 176, 0.1);
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sharepointLink:hover {
+  background: rgba(74, 247, 176, 0.2);
+  border-color: var(--color-primary);
+}
+
+.sharepointLink svg {
+  width: 16px;
+  height: 16px;
+}
+
 .logoutButton {
   display: flex;
   align-items: center;
@@ -66,6 +92,10 @@
   }
   
   .title {
+    display: none;
+  }
+
+  .sharepointLink span {
     display: none;
   }
   

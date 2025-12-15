@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import styles from './MediaModal.module.css';
 import { calculateQuota, upvoteMedia, downvoteMedia, vetoMedia } from '@/lib/mediaService';
@@ -9,6 +9,8 @@ import { isVideoFile } from '@/lib/storageService';
 export default function MediaModal({ filename, url, votes, onClose, onVoteUpdate }) {
   const [isVoting, setIsVoting] = useState(false);
   const [currentVotes, setCurrentVotes] = useState(votes);
+  const [isPortrait, setIsPortrait] = useState(false);
+  const imgRef = useRef(null);
   
   const isVideo = isVideoFile(filename);
   // Use provided URL (from Firebase Storage) or fallback to local path
@@ -20,6 +22,16 @@ export default function MediaModal({ filename, url, votes, onClose, onVoteUpdate
   const formatQuota = (q) => {
     if (q === null) return 'No votes yet';
     return `${Math.round(q * 100)}% positive`;
+  };
+
+  // Detect if image is portrait or landscape
+  const handleImageLoad = (e) => {
+    const img = e.target;
+    if (img.naturalHeight > img.naturalWidth) {
+      setIsPortrait(true);
+    } else {
+      setIsPortrait(false);
+    }
   };
 
   const handleKeyDown = useCallback((e) => {
@@ -94,7 +106,7 @@ export default function MediaModal({ filename, url, votes, onClose, onVoteUpdate
 
   return (
     <div className={styles.overlay} onClick={handleBackdropClick}>
-      <div className={styles.modal}>
+      <div className={`${styles.modal} ${isPortrait ? styles.portrait : styles.landscape}`}>
         <button className={styles.closeButton} onClick={onClose} aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -118,16 +130,15 @@ export default function MediaModal({ filename, url, votes, onClose, onVoteUpdate
                 alt={filename}
                 className={styles.media}
                 style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
+                onLoad={handleImageLoad}
               />
             ) : (
-              <Image
+              <img
                 src={mediaPath}
                 alt={filename}
-                fill
-                sizes="100vw"
                 className={styles.media}
-                style={{ objectFit: 'contain' }}
-                priority
+                style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
+                onLoad={handleImageLoad}
               />
             )
           )}

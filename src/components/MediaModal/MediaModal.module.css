@@ -15,15 +15,25 @@
 
 .modal {
   position: relative;
-  width: 100%;
-  max-width: 1200px;
-  max-height: 90vh;
   display: flex;
   flex-direction: column;
   background: var(--color-secondary);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-height: 95vh;
+}
+
+/* Default for landscape images */
+.modal.landscape {
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* For portrait images - make them taller */
+.modal.portrait {
+  max-width: min(600px, 90vw);
+  max-height: 95vh;
 }
 
 .closeButton {
@@ -58,11 +68,21 @@
   position: relative;
   flex: 1;
   min-height: 300px;
-  max-height: 60vh;
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+/* For landscape images */
+.modal.landscape .mediaContainer {
+  max-height: 65vh;
+}
+
+/* For portrait images - allow more height */
+.modal.portrait .mediaContainer {
+  max-height: 75vh;
 }
 
 .media {
