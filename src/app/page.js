@@ -11,6 +11,7 @@ import styles from './page.module.css';
 
 // List of media files in the public/media folder (legacy local files)
 const LOCAL_MEDIA_FILES = [
+  'WhatsApp Image 2025-12-04 at 18.55.41.jpeg',
   'WhatsApp Image 2025-12-05 at 11.01.42.jpeg',
   'WhatsApp Image 2025-12-05 at 11.01.45.jpeg',
   'WhatsApp Image 2025-12-05 at 11.01.50 (1).jpeg',
@@ -32,6 +33,11 @@ const LOCAL_MEDIA_FILES = [
   'WhatsApp Image 2025-12-05 at 11.33.53 (2).jpeg',
   'WhatsApp Image 2025-12-05 at 11.33.53.jpeg',
   'WhatsApp Image 2025-12-05 at 11.33.54.jpeg',
+  'WhatsApp Image 2025-12-05 at 17.04.04 (1).jpeg',
+  'WhatsApp Image 2025-12-05 at 17.04.04.jpeg',
+  'WhatsApp Image 2025-12-05 at 17.04.05 (1).jpeg',
+  'WhatsApp Image 2025-12-05 at 17.04.05 (2).jpeg',
+  'WhatsApp Image 2025-12-05 at 17.04.05.jpeg',
   'WhatsApp Video 2025-12-05 at 11.01.44.mp4',
   'WhatsApp Video 2025-12-05 at 11.01.48.mp4',
   'WhatsApp Video 2025-12-05 at 11.01.54.mp4',
@@ -45,20 +51,22 @@ const LOCAL_MEDIA_FILES = [
   'WhatsApp Video 2025-12-05 at 11.39.37.mp4',
   'WhatsApp Video 2025-12-05 at 11.39.38.mp4',
   'WhatsApp Video 2025-12-05 at 11.39.40.mp4',
+  'WhatsApp Video 2025-12-05 at 17.04.05 (1).mp4',
+  'WhatsApp Video 2025-12-05 at 17.04.05.mp4',
 ];
 
-// Fetch SharePoint files from our API
+// Fetch SharePoint files from our API (fails silently if not configured)
 async function fetchSharePointFiles() {
   try {
     const response = await fetch('/api/sharepoint/files');
     if (!response.ok) {
-      console.error('Failed to fetch SharePoint files:', response.status);
+      // SharePoint not configured or permission pending - fail silently
       return [];
     }
     const data = await response.json();
     return data.files || [];
-  } catch (error) {
-    console.error('Error fetching SharePoint files:', error);
+  } catch {
+    // Network error or API not available - fail silently
     return [];
   }
 }
