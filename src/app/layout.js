@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Rankeffect Media Gallery",
   description: "Vote on media content",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {
